@@ -1,6 +1,9 @@
 # Description
 
-This repository is meant to serve as a general template for how to set up new repositories in the JogetOSS organization. 
+**Organizational Chart Userview Menu** plugin designed to seamlessly extract organizational data from Joget platform. The plugin efficiently retrieves information related to organizations, departments, sub-departments, and users. The primary purpose of this plugin is to facilitate the visualization of organizational structures by generating dynamic organizational charts based on the extracted data..
+
+To setup and configure this plugin, please see the documentation at []
+
 
 # Getting Help
 

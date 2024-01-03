@@ -1,0 +1,183 @@
+.orgchart {
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    transform: scale(0.65);
+}
+
+.chart-legend {
+    display: flex;
+}
+.chart-legend__item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Adjust as needed for spacing between items */
+}
+.chart-legend_item_color {
+    margin-right: 5px; /* Adjust as needed for space between color box and title */
+}
+
+.orgchart .node.highlight-parent .title, .chart-legend_item_color.highlight-parent {
+    background-color: #C3534C;
+}
+.orgchart .node.highlight-parent .content {
+    border: 1px solid blue;
+}
+.orgchart .node.highlight-siblings .title, .chart-legend_item_color.highlight-siblings {
+    background-color: green;
+}
+.orgchart .node.highlight-siblings .content {
+    border: 1px solid green;
+}
+.orgchart .node.highlight-children .title, .chart-legend_item_color.highlight-children {
+    background-color: #aeaeae;
+}
+.orgchart .node.highlight-children .content {
+    border: 1px solid #aeaeae;
+}
+#chart-legend {
+    padding: 10px;
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 2px dashed #aaa;
+}
+#chart-legend__title {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.chart-legend__item {
+    margin-bottom: 5px;
+    padding: 5px 10px;
+}
+.chart-legend_item_color,
+.chart-legend_item_title {
+    vertical-align: middle;
+    line-height: 20px;
+}
+.chart-legend_item_color {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+}
+.chart-legend__item div {
+    display: inline-block;
+}
+.orgchart .node .title {
+    height:auto;
+    min-height: 50px;
+    width: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    font-weight: bold;
+    white-space:normal;
+    border-radius: 15px 15px 0em 0em;
+}
+.orgchart .node .content {
+    height:auto;
+    min-height: 50px;
+    display: flex;
+    width: 220px;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+    white-space:normal;
+    border-radius: 0em 0em 15px 15px;
+}
+.orgchart .node.highlight-parent .title,
+.chart-legend_item_color.highlight-parent {
+}
+.orgchart .node.highlight-siblings .title,
+.chart-legend_item_color.highlight-siblings {
+
+}
+.orgchart .node.highlight-children .title,
+.chart-legend_item_color.highlight-children {
+}
+.orgchart .node {
+    border-radius:15px !important;
+}
+#chart-container {
+    height: 67vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+}
+.oci {
+    position: relative;
+    font-style: normal;
+    font-family: Arial;
+    margin-right: 1em;
+}
+/* Style for the export button */
+.oc-export-btn {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50; /* Greenish color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.oc-export-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+.orgchart .node .rightEdge {
+    right: -16px;
+}
+
+/* Style for buttons and selects */
+button, select {
+    text-transform: none;
+    padding: 0.5em;
+    background-color: #4CAF50; /* Greenish color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover, select:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Additional styles for select dropdown arrow */
+select {
+    appearance: none; /* Remove default appearance */
+    background-image: url('path-to-dropdown-arrow-icon.png'); /* Replace with your dropdown arrow icon */
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: 1.2em; /* Adjust the size of the arrow icon */
+    padding-right: 1.5em; /* Add space for the arrow icon */
+}
+
+/* Style for select dropdown options */
+select option {
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+}
+
+@media screen and (max-width: 1500px) {
+    /* Styles for screen widths of 1500 pixels and below */
+    .orgchart .node .content {
+        font-size: 0.85rem; /* Reduced font size */
+        height: 40px; /* Reduced height */
+        width: 200px; /* Reduced width */
+    }
+    .orgchart .node .title {
+        font-size: medium; /* Reduced font size */
+        height: 40px; /* Reduced height */
+        width: 200px; /* Reduced width */
+    }
+    #chart-container
+    {
+        height: 62vh;
+    }
+}

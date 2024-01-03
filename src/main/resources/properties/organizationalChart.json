@@ -1,0 +1,221 @@
+[{
+        "title": "@@org.joget.marketplace.orgchart.config@@",
+        "properties": [
+            {
+                "name": "id",
+                "label": "Id",
+                "type": "hidden"
+            },
+            {
+                "name": "customId",
+                "label": "@@org.joget.marketplace.orgchart.customId@@",
+                "type": "textfield",
+                "regex_validation": "^[a-zA-Z0-9_]+$",
+                "validation_message": "@@org.joget.marketplace.orgchart.invalidId@@"
+            },
+            {
+                "name": "label",
+                "label": "@@org.joget.marketplace.orgchart.label@@",
+                "type": "textfield",
+                "required": "True",
+                "value": "@@org.joget.marketplace.orgchart.defaultValue@@"
+            },
+            {
+                "name": "layouts",
+                "label": "@@org.joget.marketplace.orgchart.designOptions@@",
+                "type": "selectbox",
+                "value": "horizontal",
+                "options": [
+                    {
+                        "value": "horizontal", 
+                        "label": "@@org.joget.marketplace.orgchart.horizontalChart@@"
+                    },
+                    {
+                        "value": "vertical", 
+                        "label": "@@org.joget.marketplace.orgchart.verticalChart@@"
+                    }
+                ]
+            },
+            {
+                "name": "enableParent",
+                "label": "@@org.joget.marketplace.orgchart.enableParent@@",
+                "type": "checkbox",
+                "value": "false",
+                "options": [
+                    {
+                        "value": "true",
+                        "label": ""
+                    }
+                ]
+            },
+            {
+                "name": "panZoom",
+                "label": "@@org.joget.marketplace.orgchart.panZoom@@",
+                "type": "checkbox",
+                "value": "false",
+                "options": [
+                    {
+                        "value": "true",
+                        "label": ""
+                    }
+                ]
+            },
+            {
+                "name": "collapsed",
+                "label": "@@org.joget.marketplace.orgchart.collapsed@@",
+                "type": "checkbox",
+                "value": "false",
+                "options": [
+                    {
+                        "value": "true",
+                        "label": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "title" : "@@org.joget.marketplace.orgchart.dataSource@@",
+        "properties" : [
+            {
+                "name": "dataSource",
+                "label": "@@org.joget.marketplace.orgchart.dataSource@@",
+                "type": "selectbox",
+                "options": [
+                    {
+                        "value": "jogetOrgChart", 
+                        "label": "@@org.joget.marketplace.orgchart.jogetOrgChart@@"
+                    },
+                    {
+                        "value": "formData", 
+                        "label": "@@org.joget.marketplace.orgchart.formData@@"
+                    }
+                ]
+            },
+            {
+                "name": "ORGID",
+                "label": "@@org.joget.marketplace.orgchart.SelectOrganization@@",
+                "type": "selectbox",
+                "options_ajax": "[CONTEXT_PATH]/web/json/plugin/org.joget.apps.userview.lib.UserPermission/service?action=getOrgs",
+                "control_field":"dataSource",
+                "control_value":"jogetOrgChart"
+            },
+            {
+                "name": "formDefId",
+                "label": "@@org.joget.marketplace.orgchart.formDefId@@",
+                "type": "selectbox",
+                "options_ajax": "[CONTEXT_PATH]/web/json/console/app[APP_PATH]/forms/options",
+                "required": "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "label" : "@@org.joget.marketplace.orgchart.fieldMappings@@",
+                "type" : "header",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "name": "organizationName",
+                "label": "@@org.joget.marketplace.orgchart.organizationName@@",
+                "type": "textfield",
+                "description" : "@@org.joget.marketplace.orgchart.organizationNameDesc@@",
+                "required": "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "name" : "departmentField",
+                "label" : "@@org.joget.marketplace.orgchart.departmentField@@",
+                "type" : "selectbox",
+                "description" : "@@org.joget.marketplace.orgchart.departmentFieldDesc@@",
+                "options_ajax_on_change" : "formDefId",
+                "options_ajax" : "[CONTEXT_PATH]/web/json/console/app[APP_PATH]/form/columns/options",
+                "required" : "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "name" : "nameField",
+                "label" : "@@org.joget.marketplace.orgchart.nameField@@",
+                "type" : "selectbox",
+                "description" : "@@org.joget.marketplace.orgchart.nameFieldDesc@@",
+                "options_ajax_on_change" : "formDefId",
+                "options_ajax" : "[CONTEXT_PATH]/web/json/console/app[APP_PATH]/form/columns/options",
+                "required" : "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "name" : "jobTitleField",
+                "label" : "@@org.joget.marketplace.orgchart.jobTitleField@@",
+                "type" : "selectbox",
+                "description" : "@@org.joget.marketplace.orgchart.jobTitleFieldDesc@@",
+                "options_ajax_on_change" : "formDefId",
+                "options_ajax" : "[CONTEXT_PATH]/web/json/console/app[APP_PATH]/form/columns/options",
+                "required" : "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            },
+            {
+                "name" : "parentIDField",
+                "label" : "@@org.joget.marketplace.orgchart.parentIDField@@",
+                "type" : "selectbox",
+                "description" : "@@org.joget.marketplace.orgchart.parentIDFieldDesc@@",
+                "options_ajax_on_change" : "formDefId",
+                "options_ajax" : "[CONTEXT_PATH]/web/json/console/app[APP_PATH]/form/columns/options",
+                "required" : "True",
+                "control_field":"dataSource",
+                "control_value":"formData"
+            }
+        ]
+    },
+    {
+        "title": "@@org.joget.marketplace.orgchart.colors@@",
+        "properties": [
+            {
+                "name": "nodeParentColor",
+                "label": "@@org.joget.marketplace.orgchart.nodeParentColor@@",
+                "type": "color",
+                "value": "#2110B6" 
+            },
+            {
+                "name": "nodeSiblingColor",
+                "label": "@@org.joget.marketplace.orgchart.nodeSiblingColor@@",
+                "type": "color",
+                "value": "#867CE5" 
+            },
+            {
+                "name": "nodeChildrenColor",
+                "label": "@@org.joget.marketplace.orgchart.nodeChildrenColor@@",
+                "type": "color",
+                "value": "#8314BA" 
+            },
+            {
+                "name": "nodeTitleColor",
+                "label": "@@org.joget.marketplace.orgchart.nodeTitleColor@@",
+                "type": "color",
+                "value": "#039BE5" 
+            },
+            {
+                "name": "nodeContentColor",
+                "label": "@@org.joget.marketplace.orgchart.nodeContentColor@@",
+                "type": "color",
+                "value": "#B4FFFF" 
+            },
+
+            {
+                "name": "TitleFontColor",
+                "label": "@@org.joget.marketplace.orgchart.TitleFontColor@@",
+                "type": "color",
+                "value": "#FFFFFF" 
+            },
+            {
+                "name": "TitleContentColor",
+                "label": "@@org.joget.marketplace.orgchart.TitleContentColor@@",
+                "type": "color",
+                "value": "#000000" 
+            }
+        ]
+    }
+]
