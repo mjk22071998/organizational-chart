@@ -1,15 +1,18 @@
 package org.joget.marketplace.model;
 
 import java.util.List;
+import org.joget.directory.model.Employment;
 import org.joget.directory.model.User;
 
 public class DepartmentNode {
-    
+
     private String id;
     private String name;
     private String pid;
     private String hodName;
     private String title;
+    private User hodUser;
+    private Employment hod;
     private List<User> users; // Corrected the type to List<User>
 
     public String getTitle() {
@@ -29,10 +32,8 @@ public class DepartmentNode {
     public void setHodName(String hodName) {
         this.hodName = hodName;
     }
-   
 
     // Getter and setter methods for id, name, pid, and children
-
     public String getId() {
         return id;
     }
@@ -75,5 +76,21 @@ public class DepartmentNode {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public User getHodUser() {
+        return hodUser;
+    }
+
+    public void setHodUser(User hodUser) {
+        this.hodUser = hodUser;
+    }
+
+    public Employment getHod() {
+        return hod;
+    }
+
+    public void setHod(Employment hod) {
+        this.hod = hod;
     }
 }

@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.springframework.context.ApplicationContext;
 import static org.joget.apps.datalist.model.DataListBinderDefault.USERVIEW_KEY_SYNTAX;
 
+
 public class OrganizationalChart extends UserviewMenu implements PluginWebSupport {
 
     ApplicationContext ac = AppUtil.getApplicationContext();
@@ -47,7 +48,6 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         Map<String, Object> freeMarkerModel = new HashMap<>();
         freeMarkerModel.put("request", getRequestParameters());
         freeMarkerModel.put("element", this);
-     
         // Retrieve and add the color properties to the FreeMarker model
         freeMarkerModel.put("nodeTitleColor", getPropertyString("nodeTitleColor"));
         freeMarkerModel.put("nodeContentColor", getPropertyString("nodeContentColor"));
@@ -82,7 +82,6 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         Parent parent = new Parent();
         // Retrieve the selected organization ID from user input
         String selectedOrgId = getPropertyString("ORGID");
-        //LogUtil.info(getClass().getName(), "Selected Organization JSON: " + selectedOrgId); // Logging the JSON
         Organization organization = directoryManager.getOrganization(selectedOrgId);
 
         if (organization != null) {
@@ -92,7 +91,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
 
             // Build the hierarchical structure
             List<DepartmentNode> departmentNodes = new ArrayList<>();
-            getDepartments(departments, departmentNodes, nodesMap, null);
+            getDepartments(departments, departmentNodes, nodesMap, null, null);
 
             // Convert the hierarchical structure into the JSON format expected by OrgChart
             List<Children> childrenList = buildChildrenList(nodesMap, null);
@@ -110,7 +109,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         }
     }
 
-    public void getDepartments(Collection<Department> departments, List<DepartmentNode> nodes, Map<String, DepartmentNode> nodesMap, String parentId) {
+    public void getDepartments(Collection<Department> departments, List<DepartmentNode> nodes, Map<String, DepartmentNode> nodesMap, String parentId, Employment inheritedHod) {
         for (Department department : departments) {
             DepartmentNode node = new DepartmentNode();
 
@@ -120,13 +119,22 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
             if (hod != null) {
                 hodUser = hod.getUser();
                 hodName = hod.getUser().getFirstName() + " " + hod.getUser().getLastName();
+            } else if (inheritedHod != null) { // If the current department has no HOD, use the inherited HOD
+                hodUser = inheritedHod.getUser();
+                hodName = inheritedHod.getUser().getFirstName() + " " + inheritedHod.getUser().getLastName();
             }
+            Employment subDepartmentHod = (hod != null) ? hod : inheritedHod;
 
             String departmentId = department.getId();
 
             node.setId(departmentId);
-            if (hodName != null && !hodName.isEmpty()) {
+            if (hod != null) {
                 node.setTitle(hodName + " (HOD)");
+            } else if (inheritedHod != null) {
+                // Display the inherited HOD from the parent department
+                hodUser = inheritedHod.getUser();
+                hodName = inheritedHod.getUser().getFirstName() + " " + inheritedHod.getUser().getLastName();
+                node.setTitle(hodName); // Updated to differentiate inherited HOD
             } else {
                 node.setTitle("");
             }
@@ -161,7 +169,12 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
 
             Collection<Department> subDepartmentList = directoryManager.getDepartmentsByParentId("", departmentId, "name", Boolean.FALSE, 0, -1);
             if (!subDepartmentList.isEmpty()) {
-                getDepartments(subDepartmentList, nodes, nodesMap, departmentId);
+
+                Employment currentDepartmentHod = department.getHod();
+                subDepartmentHod = (currentDepartmentHod != null) ? currentDepartmentHod : subDepartmentHod;
+
+                // Pass the updated subDepartmentHod to the recursive call
+                getDepartments(subDepartmentList, nodes, nodesMap, departmentId, subDepartmentHod);
             }
         }
     }
@@ -173,6 +186,36 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                 Children child = new Children();
                 child.setName(node.getName());
                 child.setTitle(node.getTitle());
+
+                Employment inheritedHod = null;
+
+                // Check if the node has its own HOD
+                Employment hod = node.getHod();
+
+                if (hod == null) {
+                    // If the current department doesn't have an HOD, try to inherit from the parent
+                    DepartmentNode parentNode = nodesMap.get(node.getPid());
+                    if (parentNode != null) {
+                        Employment parentHod = parentNode.getHod();
+                        if (parentHod != null) {
+                            hod = parentHod; // Inherit HOD from the parent department
+                            inheritedHod = parentHod;
+                        }
+                    }
+                }
+                // Set title based on HOD information
+                if (hod != null) {
+                    String hodName = hod.getUser().getFirstName() + " " + hod.getUser().getLastName();
+                    child.setTitle(node.getTitle() + " (HOD: " + hodName + ")");
+                } else if (inheritedHod != null) {
+                    // Inherit HOD from the parent if the node itself doesn't have an HOD
+                    child.setTitle(node.getTitle() + " (" + inheritedHod.getUser().getFirstName() + " " + inheritedHod.getUser().getLastName() + " - HOD - Inherited)");
+                } else {
+                    child.setTitle(node.getTitle());
+                }
+
+                child.setHodUser(node.getHodUser());
+                child.setHod(node.getHod());
 
                 List<Children> subChildren = buildChildrenList(nodesMap, node.getId());
 
@@ -210,7 +253,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         return childrenList;
     }
 
-     private void getFormData(){
+    private void getFormData(){
         Parent parent = new Parent();
         List<Children> childrenList = new ArrayList<>();
 
@@ -222,10 +265,10 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         AppService appService = (AppService) AppUtil.getApplicationContext().getBean("appService");
         String tableName = appService.getFormTableName(AppUtil.getCurrentAppDefinition(), formDefId);
         FormRowSet data = getData(formDefId, tableName);
-     
+
         for (FormRow r : data) {
-            String departmentStr = r.getProperty(departmentField);    
-            String nameStr = r.getProperty(nameField);    
+            String departmentStr = r.getProperty(departmentField);
+            String nameStr = r.getProperty(nameField);
             String titleStr = r.getProperty(titleField);
             String parentStr = r.getProperty(parentField);
 
@@ -233,9 +276,9 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                 Children child = new Children();
                 child.setName(departmentStr);
                 child.setTitle(nameStr + " (" + titleStr + ")");
-              
+
                 buildFormDataChildrenList(child, data, departmentStr);
-                
+
                 childrenList.add(child);
             }
         }
@@ -249,7 +292,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         String orgChart = gson.toJson(parent);
 
         setProperty("datascource", orgChart);
-        
+
     }
 
     private void buildFormDataChildrenList(Children child, FormRowSet data, String departmentStr) {
@@ -284,25 +327,24 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
        child.setChildren(userChildren);
     }
 
-     /**
-     * Retrieve all the form data based on selected form 
-     * @param formDefId
-     * @param tableName
-     * @return 
+    /**
+     * Retrieve all the form data based on selected form
+     *
+     * @return
      */
     protected FormRowSet getData(String formDefId, String tableName) {
         FormDataDao formDataDao = (FormDataDao) AppUtil.getApplicationContext().getBean("formDataDao");
-        
+
         String condition = "";
-        Collection<String> params = new ArrayList<>();
-        
+        Collection<String> params = new ArrayList<String>();
+
         String extraCondition = getPropertyString("extraCondition");
         String keyName = getPropertyString(Userview.USERVIEW_KEY_NAME);
         String keyValue = getUserview().getParamString("key");
         if (keyValue == null || Userview.USERVIEW_KEY_EMPTY_VALUE.equals(keyValue)) {
             keyValue = "";
         }
-        
+
         if (extraCondition != null && extraCondition.contains(USERVIEW_KEY_SYNTAX)) {
             extraCondition = extraCondition.replaceAll(StringUtil.escapeRegex(USERVIEW_KEY_SYNTAX), StringUtil.escapeRegex(keyValue));
         } else if (keyName != null && !keyName.isEmpty() && keyValue != null && !keyValue.isEmpty()) {
@@ -312,38 +354,39 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
             condition += getFieldName(keyName) + " = ?";
             params.add(keyValue);
         }
-        
+
         if (!extraCondition.isEmpty()) {
             if (!condition.isEmpty()) {
                 condition += " AND ";
             }
             condition += extraCondition;
         }
-        
+
         if (!condition.isEmpty()) {
             condition = " WHERE " + condition;
         }
-        
+
         FormRowSet rows = formDataDao.find(tableName, tableName, condition, params.toArray(new String[0]), FormUtil.PROPERTY_DATE_CREATED, false, null, null);
         rows.setMultiRow(true);
-        
+
         return rows;
     }
 
-     /**
+    /**
      * Get the field name with prefix
+     *
      * @param name
-     * @return 
+     * @return
      */
     protected String getFieldName(String name) {
-        if (name != null && !name.isEmpty() && !FormUtil.PROPERTY_ID.equals(name) &&
-                !(FormUtil.PROPERTY_CREATED_BY.equals(name) || 
-                FormUtil.PROPERTY_CREATED_BY_NAME.equals(name) || 
-                FormUtil.PROPERTY_MODIFIED_BY.equals(name) || 
-                FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(name))) {
+        if (name != null && !name.isEmpty() && !FormUtil.PROPERTY_ID.equals(name)
+                && !(FormUtil.PROPERTY_CREATED_BY.equals(name)
+                || FormUtil.PROPERTY_CREATED_BY_NAME.equals(name)
+                || FormUtil.PROPERTY_MODIFIED_BY.equals(name)
+                || FormUtil.PROPERTY_MODIFIED_BY_NAME.equals(name))) {
             name = FormUtil.PROPERTY_CUSTOM_PROPERTIES + "." + name;
         }
-        name = "e."+name;
+        name = "e." + name;
         return name;
     }
 
