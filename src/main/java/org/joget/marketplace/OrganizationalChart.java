@@ -277,7 +277,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                 child.setName(departmentStr);
                 child.setTitle(nameStr + " (" + titleStr + ")");
 
-                buildFormDataChildrenList(child, data, departmentStr);
+                buildFormDataChildrenList(child, data, departmentStr, nameStr, titleStr);
 
                 childrenList.add(child);
             }
@@ -295,7 +295,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
 
     }
 
-    private void buildFormDataChildrenList(Children child, FormRowSet data, String departmentStr) {
+    private void buildFormDataChildrenList(Children child, FormRowSet data, String departmentStr, String parentNameStr, String parentTitleStr) {
         List<Children> userChildren = new ArrayList<>();
         for (FormRow rChild : data) {
             String childDepartmentStr = rChild.getProperty(getPropertyString("departmentField"));
@@ -314,12 +314,18 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
             } else {
                 if (childParentStr != null && !childParentStr.isEmpty()) {
                     if (childParentStr.equals(departmentStr)) {
-                        Children userChild = new Children();
-                        userChild.setName(childDepartmentStr);
-                        userChild.setTitle(childNameStr + " (" + childTitleStr + ")");
-                        userChildren.add(userChild);
-
-                        buildFormDataChildrenList(userChild, data, childDepartmentStr);
+                         Children userChild = new Children();
+                        if (childNameStr.isEmpty() && childTitleStr.isEmpty()) {
+                            userChild.setName(childDepartmentStr);
+                            userChild.setTitle(parentNameStr + " (" + parentTitleStr + ")");
+                            userChildren.add(userChild);
+                        } else {
+                            userChild.setName(childDepartmentStr);
+                            userChild.setTitle(childNameStr + " (" + childTitleStr + ")");
+                            userChildren.add(userChild);
+                        }
+                 
+                        buildFormDataChildrenList(userChild, data, childDepartmentStr, childNameStr, childTitleStr);
                     }
                 }
             }
