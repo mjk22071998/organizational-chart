@@ -35,11 +35,7 @@ import org.json.JSONArray;
 import org.springframework.context.ApplicationContext;
 import static org.joget.apps.datalist.model.DataListBinderDefault.USERVIEW_KEY_SYNTAX;
 
-
 public class OrganizationalChart extends UserviewMenu implements PluginWebSupport {
-
-    ApplicationContext ac = AppUtil.getApplicationContext();
-    ExtDirectoryManager directoryManager = (ExtDirectoryManager) ac.getBean("directoryManager");
 
     public static final String LAYOUTS = "horizontal";
 
@@ -77,7 +73,9 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
         return content;
     }
 
-    private void getJogetOrganizationChart(){
+    private void getJogetOrganizationChart() {
+        ApplicationContext ac = AppUtil.getApplicationContext();
+        ExtDirectoryManager directoryManager = (ExtDirectoryManager) ac.getBean("directoryManager");
         JSONArray jsArray = new JSONArray();
         Parent parent = new Parent();
         // Retrieve the selected organization ID from user input
@@ -110,6 +108,8 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
     }
 
     public void getDepartments(Collection<Department> departments, List<DepartmentNode> nodes, Map<String, DepartmentNode> nodesMap, String parentId, Employment inheritedHod) {
+        ApplicationContext ac = AppUtil.getApplicationContext();
+        ExtDirectoryManager directoryManager = (ExtDirectoryManager) ac.getBean("directoryManager");
         for (Department department : departments) {
             DepartmentNode node = new DepartmentNode();
 
@@ -134,7 +134,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                 // Display the inherited HOD from the parent department
                 hodUser = inheritedHod.getUser();
                 hodName = inheritedHod.getUser().getFirstName() + " " + inheritedHod.getUser().getLastName();
-                node.setTitle(hodName); // Updated to differentiate inherited HOD
+                node.setTitle(hodName + " (HOD)"); // Updated to differentiate inherited HOD
             } else {
                 node.setTitle("");
             }
@@ -314,7 +314,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
             } else {
                 if (childParentStr != null && !childParentStr.isEmpty()) {
                     if (childParentStr.equals(departmentStr)) {
-                         Children userChild = new Children();
+                        Children userChild = new Children();
                         if (childNameStr.isEmpty() && childTitleStr.isEmpty()) {
                             userChild.setName(childDepartmentStr);
                             userChild.setTitle(parentNameStr + " (" + parentTitleStr + ")");
@@ -324,13 +324,12 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                             userChild.setTitle(childNameStr + " (" + childTitleStr + ")");
                             userChildren.add(userChild);
                         }
-                 
                         buildFormDataChildrenList(userChild, data, childDepartmentStr, childNameStr, childTitleStr);
                     }
                 }
             }
         }
-       child.setChildren(userChildren);
+        child.setChildren(userChildren);
     }
 
     /**

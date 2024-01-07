@@ -1,3 +1,5 @@
+<#if element.properties.ORGID?has_content>
+
 <script src="${request.contextPath}/plugin/org.joget.marketplace.OrganizationalChart/orgchart/ajaxcdn.js"></script>
 <script src="${request.contextPath}/plugin/org.joget.marketplace.OrganizationalChart/orgchart/html2canvas.min.js"></script>
 <script src="${request.contextPath}/plugin/org.joget.marketplace.OrganizationalChart/orgchart/jspdf.umd.min.js"></script>
@@ -141,3 +143,4 @@ function adjustChartContainer() {
     });
 
 </script>
+</#if>

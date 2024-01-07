@@ -95,6 +95,7 @@
             {
                 "name": "ORGID",
                 "label": "@@org.joget.marketplace.orgchart.SelectOrganization@@",
+                "required":"True",
                 "type": "selectbox",
                 "options_ajax": "[CONTEXT_PATH]/web/json/plugin/org.joget.apps.userview.lib.UserPermission/service?action=getOrgs",
                 "control_field":"dataSource",
