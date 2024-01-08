@@ -1,8 +1,8 @@
 # Description
 
-**Organizational Chart Userview Menu** plugin designed to seamlessly extract organizational data from Joget platform. The plugin efficiently retrieves information related to organizations, departments, sub-departments, and users. The primary purpose of this plugin is to facilitate the visualization of organizational structures by generating dynamic organizational charts based on the extracted data..
+**Organizational Chart Userview Menu** plugin is used to visualise organizational charts based on Joget Organization Chart data or Form Data. This plugin efficiently retrieves information related to organizations, departments, sub-departments, users and their job titles. 
 
-To setup and configure this plugin, please see the documentation at []
+To setup and configure this plugin, please see the [documentation](https://dev.joget.org/community/display/SANDBOX2/Organizational+Chart+Userview+Menu).
 
 
 # Getting Help

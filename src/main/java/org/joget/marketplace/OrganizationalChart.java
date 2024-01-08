@@ -433,7 +433,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
 
     @Override
     public String getDescription() {
-        return "Organizational Chart";
+        return "Organizational Chart that retrieves data from Joget Organization Chart or Form Data.";
     }
 
     @Override
