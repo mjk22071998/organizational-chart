@@ -97,9 +97,7 @@
                 "label": "@@org.joget.marketplace.orgchart.SelectOrganization@@",
                 "required":"True",
                 "type": "selectbox",
-                "options_ajax": "[CONTEXT_PATH]/web/json/plugin/org.joget.apps.userview.lib.UserPermission/service?action=getOrgs",
-                "control_field":"dataSource",
-                "control_value":"jogetOrgChart"
+                "options_ajax": "[CONTEXT_PATH]/web/json/plugin/org.joget.apps.userview.lib.UserPermission/service?action=getOrgs"
             },
             {
                 "name": "formDefId",
@@ -113,15 +111,6 @@
             {
                 "label" : "@@org.joget.marketplace.orgchart.fieldMappings@@",
                 "type" : "header",
-                "control_field":"dataSource",
-                "control_value":"formData"
-            },
-            {
-                "name": "organizationName",
-                "label": "@@org.joget.marketplace.orgchart.organizationName@@",
-                "type": "textfield",
-                "description" : "@@org.joget.marketplace.orgchart.organizationNameDesc@@",
-                "required": "True",
                 "control_field":"dataSource",
                 "control_value":"formData"
             },

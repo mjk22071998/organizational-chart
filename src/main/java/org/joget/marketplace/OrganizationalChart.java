@@ -283,9 +283,15 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
             }
         }
 
+        ApplicationContext ac = AppUtil.getApplicationContext();
+        ExtDirectoryManager directoryManager = (ExtDirectoryManager) ac.getBean("directoryManager");
+        // Retrieve the selected organization ID from user input
+        String selectedOrgId = getPropertyString("ORGID");
+        Organization organization = directoryManager.getOrganization(selectedOrgId);
+
         // Create the root parent object for the organization
         parent.setName("Organization");
-        parent.setTitle(getPropertyString("organizationName"));
+        parent.setTitle(organization.getName());
         parent.setChildren(childrenList);
 
         Gson gson = new Gson();
