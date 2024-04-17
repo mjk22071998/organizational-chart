@@ -64,10 +64,10 @@
                 "name": "collapsed",
                 "label": "@@org.joget.marketplace.orgchart.collapsed@@",
                 "type": "checkbox",
-                "value": "false",
+                "value": "true",
                 "options": [
                     {
-                        "value": "true",
+                        "value": "false",
                         "label": ""
                     }
                 ]

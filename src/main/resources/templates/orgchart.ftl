@@ -80,7 +80,7 @@
       'data' : datascource,
       'nodeContent': 'title',
       'visibleLevel': 3,
-      <#if element.properties.collapsed! == 'true'>
+      <#if element.properties.collapsed! == 'false'>
       'visibleLevel': 999,
       </#if>
       'chartClass': '',
