@@ -428,7 +428,7 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
 
     @Override
     public String getVersion() {
-        return "7.0.0";
+        return "8.0.1";
     }
 
     @Override
