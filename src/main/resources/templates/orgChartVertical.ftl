@@ -75,7 +75,7 @@
       'nodeContent': 'title',
       'verticalLevel': 4,
       'visibleLevel': 3,
-      <#if element.properties.collapsed! == 'false'>
+      <#if element.properties.collapsed! == 'true'>
       'visibleLevel': 999,
       </#if>
      <#if element.properties.panZoom! == 'true'>
