@@ -228,16 +228,9 @@ public class OrganizationalChart extends UserviewMenu implements PluginWebSuppor
                         Employment employment = (Employment) user.getEmployments().iterator().next();
                         String jobTitle = employment.getRole();
 
-                        // Check if employment is not null before accessing job title
-                        if (employment != null) {
-                            // Include job title in the userChild title
-                            userChild.setName(user.getFirstName() + " " + user.getLastName());
-                            userChild.setTitle(jobTitle);
-                        } else {
-                            // If employment is null, include only the name in the title
-                            userChild.setName(user.getFirstName() + " " + user.getLastName());
-                            userChild.setTitle(user.getFirstName() + " " + user.getLastName());
-                        }
+                        // Include job title in the userChild title
+                        userChild.setName(user.getFirstName() + " " + user.getLastName());
+                        userChild.setTitle(jobTitle);
                         userChildren.add(userChild);
                     }
                     child.setChildren(userChildren);
